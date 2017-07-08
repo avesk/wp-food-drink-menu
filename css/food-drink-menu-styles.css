@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Abel|Josefin+Sans|Quicksand|Pacifico);
 
-body{
+/*body{
 
 	background-color: #808080;
 	background-color: #bdbcbc;
@@ -8,9 +8,9 @@ body{
 	color: #eaeaea;
 	font-family: 'Abel', sans-serif;
 	/*font-family: 'Quicksand', sans-serif;*/
-    font-weight: 100;
-
-}
+/*    font-weight: 100;
+*/
+}*/
 
 h1{
 
@@ -25,14 +25,19 @@ h3{
 
 }
 
-table{
+table#wp-food-drink-menu-html-table{
 
+	background-color: #808080;
+	background-color: #bdbcbc;
+	background-color: firebrick !important;
+	color: #eaeaea;
+	font-weight: 100;
 	width: 65%;
 	margin: auto;
 
 }
 
-td{
+#wp-food-drink-menu-html-table td{
 
 	font-size: 20px;
 	padding: 15px;
@@ -67,7 +72,7 @@ td.drink{
 
 @media screen and (max-width: 528px){
 
-	td{
+	#wp-food-drink-menu-html-table td{
 
 		font-size: 15px;
 		padding: 10px;

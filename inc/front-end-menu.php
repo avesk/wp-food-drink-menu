@@ -1,6 +1,6 @@
 <h3>ALL PRICES INCLUDE TAX</h3>
 
-  <table>
+  <table id="wp-food-drink-menu-html-table">
 
     <tr id="sizes">
       <td></td>

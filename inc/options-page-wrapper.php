@@ -1,3 +1,13 @@
+<style type="text/css">
+
+	#wpfooter{
+
+		position: relative;
+		top: 50px;
+
+	}
+
+</style>
 <div class="wrap" style="padding-bottom: 50px;">
 
 	<h1>Official Food & Drink Menu Plugin</h1>
@@ -49,6 +59,15 @@
 				<!-- END Size Select form -->
 			</div>	
 			<?php endif; ?>	
+
+		<br />
+
+		<h3>Adding Menu Items:</h3>
+			<p>In Order to add menu items navigate to the Food & Drink Menu Items and select 'Add New' in the drop down</p>
+
+		<h3>Shortcode Support:</h3>
+			<p>Display this menu on any page or post via the shortcode: [wp-food-drink-menu]</p>
+			<p>I.E. copy and paste '[wp-food-drink-menu]' into the body content</p>	
 		
 		</div>
 		<!-- .inside -->

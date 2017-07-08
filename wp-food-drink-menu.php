@@ -302,8 +302,7 @@
             //Set the title from the widget settings:
             $title = apply_filters( 'widget_title', $instance['title'] );
 
-            require( 'inc/front-end-menu.php' );
-            echo plugin_dir_url( __FILE__ ) . 'css/food-drink-menu-styles.css';    
+            require( 'inc/front-end-menu.php' );  
 
         }
 
@@ -311,6 +310,8 @@
 
     // Register widget
     add_action('widgets_init', create_function('', 'return register_widget("Food_Drink_Menu");'));
+
+    add_shortcode( 'wp-food-drink-menu', array( 'Food_Drink_Menu', 'widget' ) );
 
     function wp_food_drink_menu_front_end_scripts_styles() {
 
