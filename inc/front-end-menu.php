@@ -1,5 +1,4 @@
 <!--Width issue fix-->
-<!--
 <style>
     
     div.default-page-the_content_wrapper {
@@ -7,7 +6,6 @@
     }
 
 </style>
--->
 
 
 <h3>ALL PRICES INCLUDE TAX</h3>

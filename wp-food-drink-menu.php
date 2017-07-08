@@ -35,7 +35,7 @@
         $position = 15;
 
         add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-        // add_submenu_page( 'edit.php?post_type=food_drink_menu_item', 'Genre', 'Genre', 'manage_options' );
+
     }
 
     add_action('admin_menu', 'awesome_page_create');
@@ -178,8 +178,6 @@
         global $size_prices;
 
         //Noncename needed to verify where the data originated
-        // echo '<input type="hidden" name="size_prices" id="size_prices" value="' .
-        // wp_create_nonce(plugin_basename(__FILE__)) . '" />';
         wp_nonce_field( basename( __FILE__ ), 'size_prices_nonce' );
 
         //Start size price number field HTML:
@@ -211,7 +209,7 @@
 
     /*
     *
-    * Code snippets taken and modified from https://www.smashingmagazine.com/2011/10/create-custom-post-meta-boxes-wordpress/
+    * Code snippets taken and modified from https://www.smashingmagazine.com/2011/10/create-custom- post-meta-boxes-wordpress/
     *
     */
 
@@ -267,67 +265,18 @@
 
     /*
     *
-    * Food & Drink Menu Widget
+    * Food & Drink Menu Shortcode
     *
     */
+    
+    // Callback function to Display Menu via shortcode
+    function wp_food_drink_menu_shortcode( $atts ){
 
-    class Food_Drink_Menu extends WP_Widget {
-
-        // constructor
-        function __construct(){
-            
-            // Update global widget instance
-            global $Food_Drink_Menu;
-            $Food_Drink_Menu = $this;
-            
-            // define 
-            $widget_options = array( 
-                
-                'classname' => 'food_drink_menu_widget',
-                'description' => 'Front and food drink menu widget'
-            
-            );
-            
-            // Instantiate the parent object
-            parent::__construct( 
-                
-                'food_drink_menu_widget', 'Food & Drink Menu Widget', $widget_options 
-            
-            );
-
-        }
-
-        // widget update
-        function update( $new_instance, $old_instance ){
-
-            $instance = $old_instance;
-            $instance['title'] = strip_tags( $new_instance['title'] );
-
-            return $instance;
-
-        }
-
-        // widget display
-        function widget( $args, $instance ){
-
-            // Widget output
-            
-            require( 'inc/front-end-menu.php' );  
-
-        }
-
+        require( 'inc/front-end-menu.php' );  
+        
     }
 
-    // Register widget
-    function food_drink_menu_register_widgets() {
-
-		register_widget( 'Food_Drink_Menu' );
-
-	}
-
-    add_action('widgets_init', 'food_drink_menu_register_widgets');
-    
-    add_shortcode( 'wp-food-drink-menu', array( $Food_Drink_Menu, 'widget' ) );
+    add_shortcode( 'wp-food-drink-menu', 'wp_food_drink_menu_shortcode' );
     
     // Enqueue the menu styles
     function wp_food_drink_menu_front_end_scripts_styles() {
@@ -337,7 +286,4 @@
     } 
 
     add_action( 'wp_enqueue_scripts', 'wp_food_drink_menu_front_end_scripts_styles', 50 );
-    
-    echo $Food_Drink_Menu;
-
 ?>

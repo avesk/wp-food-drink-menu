@@ -8,6 +8,7 @@
 	}
 
 </style>
+
 <div class="wrap" style="padding-bottom: 50px;">
 
 	<h1>Official Food & Drink Menu Plugin</h1>
@@ -22,7 +23,7 @@
 
 					<input type="hidden" name="wp-food-drink_num_sizes_form_submitted" value="Y">
 
-				<?php if( is_null($num_sizes) ): ?>
+				<?php if( isset($num_sizes) ): ?>
 					<input type="number" name="wp-food-drink_num_sizes" id="wp-food-drink_num_sizes" min="0">
 					<p><input class="button-primary" type="submit" name="submit" value="Next" /></p>
 				<?php else: ?>
@@ -31,8 +32,12 @@
 				<?php endif; ?>
 
 				</form>	
-
-			<?php if( isset($_POST['wp-food-drink_num_sizes']) || $num_sizes != null || $num_sizes != '' || $num_sizes = 0 ): ?>
+            
+            <!--  Funky conditional nesting to avoid 
+            Undefined variable notices from num_sizes-->
+			<?php if( isset($_POST['wp-food-drink_num_sizes']) || isset($num_sizes) )
+                if( $num_sizes != '' || $num_sizes = 0 ): ?>
+            
 			<div id="size-type" >
 				<h2>What Type Of Sizes?</h2>
 				<p>Eg.) 12 oz</p>
@@ -46,7 +51,7 @@
 								</td>
 								<td>
 									<input name='wp-food-drink_size_name_<?php echo $j ?>' id='wp-food-drink_size_name_<?php echo $j ?>' type="text" class="regular-text" 
-									value="<?php echo $sizes[$j] != null ? $sizes[$j] : '' ?>" />
+									value="<?php echo isset($sizes[$j]) ? $sizes[$j] : '' ?>" />
 								</td>
 							</tr>
 						</table>
