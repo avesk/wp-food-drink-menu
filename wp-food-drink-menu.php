@@ -16,6 +16,13 @@
 
     $options = array();
     $size_prices = array();
+    $Food_Drink_Menu; // Global var for storing the Menu widget instance
+
+    /*
+    *
+    * Initialize admin page for plugin
+    *
+    */
 
     function awesome_page_create(){
 
@@ -33,7 +40,7 @@
 
     add_action('admin_menu', 'awesome_page_create');
 
-    //Creates options page
+    // callback Creates options page
     function wp_food_drink_menu_options_page(){
 
     	//Check for sufficient user permissions
@@ -77,10 +84,8 @@
                 $i = 0;
                 while( esc_html($_POST['wp-food-drink_size_name_' . $i]) != null ){
 
-                    // echo '<p>' . 'Size: ' . esc_html($_POST['wp-food-drink_size_name_' . $i]) . '</p>';
                     $sizes[$i] = esc_html( $_POST['wp-food-drink_size_name_' . $i] );
                     $i+=1;
-                    // echo 'Here is size ' . $i . ': ' . $sizes[$i];
 
                 }
 
@@ -98,7 +103,6 @@
         if( $options['wp-food-drink_num_sizes'] != '' ){
 
             $num_sizes = $options['wp-food-drink_num_sizes'];
-            // var_dump($options['wp-food-drink_num_sizes']);
 
         }
 
@@ -107,8 +111,6 @@
         if( $options['wp-food-drink_sizes'] != '' ){
 
             $sizes = $options['wp-food-drink_sizes'];
-            // echo 'I am in the size type if';
-            // echo 'Here is size 1: ' . $sizes[0];
 
         }
 
@@ -116,22 +118,30 @@
 
     }
 
-    //Add new Custom Post Type named food_drink_menu_items:
+    /*
+    *
+    *
+    *   Add new Custom Post Type named food_drink_menu_items:
+    *   function register_wp_food_drink_custom_content(){
+    *
+    *
+    */
+
     function register_wp_food_drink_custom_content(){
 
         $labels = array(
             'name' => __( 'Food & Drink Menu Items' ),
-            'singular_name' => _x( 'Food & Drink Menu Item' ),
-            'add_new' => _x( 'Add New', 'menu_item' ),
-            'add_new_item' => _x( 'Add New Menu Item' ),
-            'edit_item' => _x( 'Edit Menu Item' ),
-            'new_item' => _x( 'New Menu Item' ),
-            'view_item' => _x( 'View Menu Item' ),
-            'search_items' => _x( 'Search Menu Items' ),
-            'not_found' => _x( 'No Menu Items found' ),
-            'not_found_in_trash' => _x( 'No Menu Items found in Trash' ),
-            'parent_item_colon' => _x( 'Parent Menu Item:' ),
-            'menu_name' => _x( 'Food & Drink Menu Items' ),
+            'singular_name' => 'Food & Drink Menu Item',
+            'add_new' => 'Add New', 'menu_item',
+            'add_new_item' => 'Add New Menu Item',
+            'edit_item' => 'Edit Menu Item',
+            'new_item' => 'New Menu Item',
+            'view_item' => 'View Menu Item',
+            'search_items' => 'Search Menu Items',
+            'not_found' => 'No Menu Items found',
+            'not_found_in_trash' => 'No Menu Items found in Trash',
+            'parent_item_colon' => 'Parent Menu Item:',
+            'menu_name' => 'Food & Drink Menu Items',
         );
      
         $args = array(
@@ -148,10 +158,10 @@
     }
 
     add_action( 'init', 'register_wp_food_drink_custom_content' );
-
+    
+    //add meta box for Video type and description:
     function add_food_drink_menu_meta_boxes(){
 
-        //add meta box for Video type and description:
         add_meta_box('meta_box_html_id', 'Size Prices', 
         'menu_item_details', 'menu_items', 'normal', 'high');
 
@@ -180,7 +190,7 @@
             // Loop through the drink sizes specified in the settings page
             // And populate the metabox with a price option for each size
             foreach( $options['wp-food-drink_sizes'] as $size ) {
-
+                
                 $size_prices[$count] = get_post_meta( $post->ID, '_size_price_' . $count, true );
                 echo get_post_meta( $post->ID, 'size_price_' . $count, true );
                 ?>
@@ -246,13 +256,7 @@
             // If there is no new meta value but an old value exists, delete it. 
             elseif ( '' == $new_meta_value && $meta_value )
                 delete_post_meta( $post_id, $meta_key, $meta_value );
-        /**
-            // Verify the metadata is set
-            if( isset($_POST['size_price_' . $i]) )
-                update_post_meta( $post_id, '_size_price_' . $i, strip_tags( $_POST['size_price_' . $i] ) );
-            else
-                break;
-        **/
+
         }
 
     }
@@ -270,17 +274,26 @@
     class Food_Drink_Menu extends WP_Widget {
 
         // constructor
-        function food_drink_menu(){
-
+        function __construct(){
+            
+            // Update global widget instance
+            global $Food_Drink_Menu;
+            $Food_Drink_Menu = $this;
+            
+            // define 
+            $widget_options = array( 
+                
+                'classname' => 'food_drink_menu_widget',
+                'description' => 'Front and food drink menu widget'
+            
+            );
+            
             // Instantiate the parent object
-            parent::__construct( false, 'Food & Drink Menu Widget' );
-
-        }
-
-        // widget form creation
-        function form( $instance ){  
-
-
+            parent::__construct( 
+                
+                'food_drink_menu_widget', 'Food & Drink Menu Widget', $widget_options 
+            
+            );
 
         }
 
@@ -298,10 +311,7 @@
         function widget( $args, $instance ){
 
             // Widget output
-
-            //Set the title from the widget settings:
-            $title = apply_filters( 'widget_title', $instance['title'] );
-
+            
             require( 'inc/front-end-menu.php' );  
 
         }
@@ -309,10 +319,17 @@
     }
 
     // Register widget
-    add_action('widgets_init', create_function('', 'return register_widget("Food_Drink_Menu");'));
+    function food_drink_menu_register_widgets() {
 
-    add_shortcode( 'wp-food-drink-menu', array( 'Food_Drink_Menu', 'widget' ) );
+		register_widget( 'Food_Drink_Menu' );
 
+	}
+
+    add_action('widgets_init', 'food_drink_menu_register_widgets');
+    
+    add_shortcode( 'wp-food-drink-menu', array( $Food_Drink_Menu, 'widget' ) );
+    
+    // Enqueue the menu styles
     function wp_food_drink_menu_front_end_scripts_styles() {
 
         wp_enqueue_style( 'wp_food_drink_menu_front_end_scripts_styles', plugin_dir_url( __FILE__ ) . 'css/food-drink-menu-styles.css' );
@@ -320,38 +337,7 @@
     } 
 
     add_action( 'wp_enqueue_scripts', 'wp_food_drink_menu_front_end_scripts_styles', 50 );
-
+    
+    echo $Food_Drink_Menu;
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
