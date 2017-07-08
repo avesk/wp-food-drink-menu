@@ -1,15 +1,64 @@
 <h3>ALL PRICES INCLUDE TAX</h3>
 
-  <table id="wp-food-drink-menu-html-table">
+    <table id="wp-food-drink-menu-html-table">
+<?php 
+    
+    // Get Sizes
+    $options = get_option( 'size_type' );
+    
+    // If there are sizes, populate the columns of the table with sizes
+    if( $options['wp-food-drink_sizes'] != '' ){
+        
+        // echo out the row
+        echo '<tr id="sizes">';
+        
+        //echo a blank column for drink names
+        echo '<td></td>';
+        
+        foreach( $options['wp-food-drink_sizes'] as $size ){
+            
+            echo '<td>' . $size . '</td>';
+            
+        }
+        
+        // End the row
+        echo '</tr>';
+        
+    }
 
-    <tr id="sizes">
-      <td></td>
-      <td>10oz</td>
-      <td>12oz</td>
-      <td>16oz</td>
-      <td>20oz</td>
+
+?>
+
+<?php 
+
+    $menu_items = new WP_Query( array('post_type' => 'menu_items') );
+    
+    if( $menu_items->have_posts() ) : while( $menu_items->have_posts() ): $menu_items->the_post();
+        
+?>
+
+    <tr>
+        
+        <td class="drink"><?php the_title(); ?></td>
+        
+        <!-- echo the price for each size:-->
+        <?php 
+            for( $i = 0; $i < sizeof($options['wp-food-drink_sizes']); $i++ ){
+                
+                if( get_post_meta(get_the_ID(), '_size_price_' . $i, true) ){
+                    
+                    echo '<td>' . get_post_meta(get_the_ID(), '_size_price_' . $i, true) . '</td>';
+                
+                }
+                    
+            } 
+        
+        ?>
+        
     </tr>
-
+    
+    <?php endwhile; endif; ?>
+<!--
     <tr>
       <td class="drink">Cappucino/Latte</td>
       <td>4.00</td>
@@ -154,5 +203,6 @@
       <td>-</td>
       <td>6.00</td>
     </tr>
+-->
 
   </table>
